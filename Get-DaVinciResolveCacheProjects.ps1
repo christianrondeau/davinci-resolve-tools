@@ -20,8 +20,18 @@ Function Format-FileSize() {
     ElseIf ($Size -gt 1GB) {[string]::Format("{0:0.00} GB", $Size / 1GB)}
     ElseIf ($Size -gt 1MB) {[string]::Format("{0:0.00} MB", $Size / 1MB)}
     ElseIf ($Size -gt 1KB) {[string]::Format("{0:0.00} kB", $Size / 1KB)}
-    ElseIf ($Size -gt 0)   {[string]::Format("{0:0.00} B", $Size)}
+    ElseIf ($Size -gt 0)   {[string]::Format("{0:0} B", $Size)}
     Else                   {"$Size"}
+}
+
+Function Get-FolderSize {
+	Param ([string]$Path)
+	Begin {
+		$fso = New-Object -comobject Scripting.FileSystemObject
+	}
+	Process {
+		Return $fso.GetFolder($Path).Size
+	}
 }
 
 $CachePath = Resolve-Path $Cache
@@ -41,7 +51,7 @@ ForEach ($CacheProject in $CacheProjects) {
 			$Key, $Value = $_ -Split '\s*:\s*', 2
 			$Info[$Key] = $Value
 		}
-		$Info["Bytes"] = (Get-ChildItem $CacheProject.FullName -Recurse | Measure-Object -Sum Length | Select-Object Sum).Sum
+		$Info["Bytes"] = Get-FolderSize $CacheProject.FullName
 		$Info["Size"] = Format-FileSize $Info["Bytes"]
 		$Projects.Add((New-Object PSObject -Property $Info))
 	}
