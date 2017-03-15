@@ -1,0 +1,3 @@
+Database Name: Local Database
+User Name: JohnDoe
+Project Name: PROJECTNAME
