@@ -32,6 +32,7 @@ If (-Not (Test-Path $CachePath)) {
 
 $CacheProjects = Get-ChildItem $CachePath -Directory
 
+$Projects = New-Object System.Collections.Generic.List[System.Object]
 ForEach ($CacheProject in $CacheProjects) {
 	$CacheProjectInfoPath = "$($CacheProject.FullName)\Info.txt"
 	If(Test-Path $CacheProjectInfoPath) {
@@ -40,7 +41,9 @@ ForEach ($CacheProject in $CacheProjects) {
 			$Key, $Value = $_ -Split '\s*:\s*', 2
 			$Info[$Key] = $Value
 		}
-		$Info["Size"] = Format-FileSize (Get-ChildItem | Measure-Object -Sum Length | Select-Object Sum).Sum
-		Write-Output $Info
+		$Info["Bytes"] = (Get-ChildItem | Measure-Object -Sum Length | Select-Object Sum).Sum
+		$Info["Size"] = Format-FileSize $Info["Bytes"]
+		$Projects.Add((New-Object PSObject -Property $Info))
 	}
 }
+Write-Output $Projects
