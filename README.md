@@ -16,7 +16,7 @@ Usage: `.\Get-DaVinciResolveCacheProject.ps1 -Cache C:\Cache`
 
 You can use PowerShell tools to filter and simplify the output:
 
-    .\Get-DaVinciResolveCacheProjects.ps1 -Cache C:\Cache | Sort-Object Bytes | Format-Table -Property "Project Name",Size,Path
+    .\Get-DaVinciResolveCacheProjects.ps1 -Cache C:\Cache | Sort-Object Bytes | Format-Table -AutoSize -Property "Project Name",Size,Path
 
 ## License
 

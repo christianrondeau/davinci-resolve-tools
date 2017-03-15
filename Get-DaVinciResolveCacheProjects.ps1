@@ -15,7 +15,7 @@ Set-StrictMode -version Latest
 $ErrorActionPreference = "Stop"
 
 Function Format-FileSize() {
-    Param ([int]$Size)
+    Param ([long]$Size)
     If     ($Size -gt 1TB) {[string]::Format("{0:0.00} TB", $Size / 1TB)}
     ElseIf ($Size -gt 1GB) {[string]::Format("{0:0.00} GB", $Size / 1GB)}
     ElseIf ($Size -gt 1MB) {[string]::Format("{0:0.00} MB", $Size / 1MB)}
@@ -36,7 +36,7 @@ $Projects = New-Object System.Collections.Generic.List[System.Object]
 ForEach ($CacheProject in $CacheProjects) {
 	$CacheProjectInfoPath = "$($CacheProject.FullName)\Info.txt"
 	If(Test-Path $CacheProjectInfoPath) {
-		$Info = @{ "Path" = $CacheProjectInfoPath }
+		$Info = @{ "Path" = $CacheProject.FullName }
 		Get-Content $CacheProjectInfoPath | ? { $_ -like '*:*' } | % {
 			$Key, $Value = $_ -Split '\s*:\s*', 2
 			$Info[$Key] = $Value
