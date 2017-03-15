@@ -33,6 +33,14 @@ If (-Not (Test-Path $CachePath)) {
 $CacheProjects = Get-ChildItem $CachePath -Directory
 
 ForEach ($CacheProject in $CacheProjects) {
-	$CacheProjectSize = Get-ChildItem | Measure-Object -Sum Length | Select-Object Sum
-	Write-Output "Project: $CacheProject = $(Format-FileSize $CacheProjectSize.Sum)"
+	$CacheProjectInfoPath = "$($CacheProject.FullName)\Info.txt"
+	If(Test-Path $CacheProjectInfoPath) {
+		$Info = @{ "Path" = $CacheProjectInfoPath }
+		Get-Content $CacheProjectInfoPath | ? { $_ -like '*:*' } | % {
+			$Key, $Value = $_ -Split '\s*:\s*', 2
+			$Info[$Key] = $Value
+		}
+		$Info["Size"] = Format-FileSize (Get-ChildItem | Measure-Object -Sum Length | Select-Object Sum).Sum
+		Write-Output $Info
+	}
 }
