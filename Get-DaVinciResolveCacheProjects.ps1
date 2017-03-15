@@ -41,7 +41,7 @@ ForEach ($CacheProject in $CacheProjects) {
 			$Key, $Value = $_ -Split '\s*:\s*', 2
 			$Info[$Key] = $Value
 		}
-		$Info["Bytes"] = (Get-ChildItem -Recurse | Measure-Object -Sum Length | Select-Object Sum).Sum
+		$Info["Bytes"] = (Get-ChildItem $CacheProject.FullName -Recurse | Measure-Object -Sum Length | Select-Object Sum).Sum
 		$Info["Size"] = Format-FileSize $Info["Bytes"]
 		$Projects.Add((New-Object PSObject -Property $Info))
 	}
