@@ -30,7 +30,7 @@ If (-Not (Test-Path $CachePath)) {
 	Throw "Specified path $CachePath does not exist"
 }
 
-$CacheProjects = Get-ChildItem $CachePath -Directory
+$CacheProjects = Get-ChildItem $CachePath | ?{ $_.PSIsContainer }
 
 $Projects = New-Object System.Collections.Generic.List[System.Object]
 ForEach ($CacheProject in $CacheProjects) {
@@ -41,7 +41,7 @@ ForEach ($CacheProject in $CacheProjects) {
 			$Key, $Value = $_ -Split '\s*:\s*', 2
 			$Info[$Key] = $Value
 		}
-		$Info["Bytes"] = (Get-ChildItem | Measure-Object -Sum Length | Select-Object Sum).Sum
+		$Info["Bytes"] = (Get-ChildItem -Recurse | Measure-Object -Sum Length | Select-Object Sum).Sum
 		$Info["Size"] = Format-FileSize $Info["Bytes"]
 		$Projects.Add((New-Object PSObject -Property $Info))
 	}
