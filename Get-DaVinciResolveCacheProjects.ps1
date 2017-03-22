@@ -8,7 +8,10 @@
 [CmdletBinding()]
 Param(
 	[Parameter(Mandatory=$true)]
-	[String] $Cache
+	[String] $Cache,
+
+	[Parameter()]
+	[Switch] $Size
 )
 
 Set-StrictMode -version Latest
@@ -58,8 +61,10 @@ ForEach ($CacheProject in $CacheProjects) {
 			$Key, $Value = $_ -Split '\s*:\s*', 2
 			$Info[$Key] = $Value
 		}
-		$Info["Bytes"] = Get-FolderSize $CacheProject.FullName
-		$Info["Size"] = Format-FileSize $Info["Bytes"]
+		if($Size) {
+			$Info["Bytes"] = Get-FolderSize $CacheProject.FullName
+			$Info["Size"] = Format-FileSize $Info["Bytes"]
+		}
 		$Projects.Add((New-Object PSObject -Property $Info))
 	}
 }

@@ -12,7 +12,7 @@ This repository contains tools to help manage DaVinci Resolve cache folders.
 
 This script returns the list of cached projects and their size.
 
-Usage: `.\Get-DaVinciResolveCacheProject.ps1 -Cache C:\Cache`
+Usage: `.\Get-DaVinciResolveCacheProject.ps1 -Cache C:\Cache` -Size
 
 You can use PowerShell tools to filter and simplify the output:
 
